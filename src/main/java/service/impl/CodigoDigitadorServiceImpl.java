@@ -2,29 +2,24 @@ package service.impl;
 
 import dto.api.DniRequest;
 import service.CodigoDigitadorService;
+import util.Constants;
 
 import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class CodigoDigitadorServiceImpl implements CodigoDigitadorService {
 
     @Override
     public String generateCodigo(DniRequest request) {
+        Integer suma = getReduce(request);
+        int residuo = suma % Constants.DEFAULT_RESIDUO;
+        int resta = Constants.DEFAULT_VALUE - residuo;
+        return Constants.DEFAULT_SERIE_NUMERICA.get(resta).toString();
+    }
 
-        List<Integer> multiplos = Arrays.asList(3, 2, 7, 6, 5, 4, 3, 2);
-        Integer suma = Arrays.stream(request.getNumero().split(""))
-                .flatMap(s -> multiplos.stream().map(
+    private Integer getReduce(DniRequest request) {
+        return Arrays.stream(request.getNumero().split(""))
+                .flatMap(s -> Constants.MULTIPLOS.stream().map(
                         integer -> Integer.parseInt(s) * integer
                 )).reduce(0, Integer::sum);
-        int residuo = suma % 11;
-
-        int valorDefault = 11;
-
-        int resta = valorDefault - residuo;
-
-        return Arrays.asList(6,7,8,9,0,1,1,2,3,4,5).get(resta).toString();
-
     }
 }
