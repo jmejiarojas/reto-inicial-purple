@@ -19,6 +19,12 @@ public class CodigoDigitadorServiceImpl implements CodigoDigitadorService {
                         integer -> Integer.parseInt(s) * integer
                 )).reduce(0, Integer::sum);
         int residuo = suma % 11;
-        return null;
+
+        int valorDefault = 11;
+
+        int resta = valorDefault - residuo;
+
+        return Arrays.asList(6,7,8,9,0,1,1,2,3,4,5).get(resta).toString();
+
     }
 }
